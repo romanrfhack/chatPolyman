@@ -1342,15 +1342,7 @@
         placeholder: 'Ejemplo: 80 cm / Ø 120 cm / 150 cm',
         showIf: (answers) => answers.productType === 'registro' && answers.registroSubtype === 'hidraulico'
       },
-      {
-        key: 'registroHydraulicHeight',
-        type: 'text',
-        question: 'Ingresa la altura',
-        placeholder: 'Ejemplo: 1.20 m',
-        optional: true,
-        hint: 'Si no la tienes por ahora, puedes omitirla.',
-        showIf: (answers) => answers.productType === 'registro' && answers.registroSubtype === 'hidraulico' && !!answers.registroHydraulicDiameter
-      },
+
       {
         key: 'registroHydraulicObservation',
         type: 'text',
