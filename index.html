@@ -1338,24 +1338,12 @@
       },
       {
         key: 'registroHydraulicDiameter',
-        type: 'choice',
+        type: 'text',
         question: 'Ingresa las medidas del tipo de registro hidráulico, diámetro',
-        choices: [
-          { label: '80 cm', value: '80 cm' },
-          { label: 'Ø 120 cm', value: 'Ø 120 cm' },
-          { label: '150 cm', value: '150 cm' }
-        ],
+        placeholder: 'Ejemplo: 80 cm / Ø 120 cm / 150 cm',
         showIf: (answers) => answers.productType === 'registro' && answers.registroSubtype === 'hidraulico'
       },
-      {
-        key: 'registroHydraulicHeight',
-        type: 'text',
-        question: 'Ingresa la altura',
-        placeholder: 'Ejemplo: 1.20 m',
-        optional: true,
-        hint: 'Si no la tienes por ahora, puedes omitirla.',
-        showIf: (answers) => answers.productType === 'registro' && answers.registroSubtype === 'hidraulico' && !!answers.registroHydraulicDiameter
-      },
+
       {
         key: 'registroHydraulicObservation',
         type: 'text',
@@ -1512,7 +1500,6 @@
       registroPhoneOption: '☎️',
       registroPhoneTraffic: '🚧',
       registroHydraulicDiameter: '📏',
-      registroHydraulicHeight: '📐',
       registroHydraulicObservation: '🗒️',
       measures: '📐',
       trafficType: '🚧',
@@ -1552,7 +1539,6 @@
       registroPhoneOption: 'Opción de registro telefónico',
       registroPhoneTraffic: 'Tipo de tráfico del registro telefónico',
       registroHydraulicDiameter: 'Diámetro del registro',
-      registroHydraulicHeight: 'Altura del registro',
       registroHydraulicObservation: 'Observaciones del registro hidráulico',
       measures: 'Medidas',
       trafficType: 'Tráfico / uso',
@@ -1579,6 +1565,12 @@
         maxLength: 30,
         pattern: /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s]+$/,
         message: 'Máximo 30 caracteres, solo letras, números y espacios.',
+        transform: v => v.slice(0, 30)
+      },
+      registroHydraulicDiameter: {
+        maxLength: 30,
+        pattern: /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\sØ\/\.\-]+$/,
+        message: 'Máximo 30 caracteres.',
         transform: v => v.slice(0, 30)
       },
       measures: {
