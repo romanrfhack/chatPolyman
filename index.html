@@ -1318,6 +1318,7 @@
           { label: 'Cónico Grande', value: 'Cónico Grande' },
           { label: 'Cónico Esbelto', value: 'Cónico Esbelto' },
           { label: 'Manhole', value: 'Manhole' },
+          { label: 'Mini-Manhole', value: 'Mini-Manhole' },
           { label: 'L1T', value: 'L1T' },
           { label: 'L2T', value: 'L2T' },
           { label: 'L3T', value: 'L3T' },
@@ -1333,7 +1334,7 @@
           { label: 'Peatonal', value: 'Peatonal' },
           { label: 'Tráfico Ligero', value: 'Tráfico Ligero' }
         ],
-        showIf: (answers) => answers.productType === 'registro' && answers.registroSubtype === 'telefonico' && requiresPhoneTraffic(answers.registroPhoneOption)
+        showIf: () => false
       },
       {
         key: 'registroHydraulicDiameter',
@@ -1704,15 +1705,20 @@
       return ['L1T', 'L2T', 'L3T', 'L4T'].includes(option);
     }
 
+    function needsRegistroPhoneMeasures(option){
+      return option === 'Cónico Esbelto';
+    }
+
     function replacesMeasures(answers){
       return (answers.productType === 'pozo' && ['Eléctrico', 'Telefónico', 'Hidráulico'].includes(answers.pozoSubtype))
-        || (answers.productType === 'registro' && answers.registroSubtype === 'hidraulico');
+        || (answers.productType === 'registro' && answers.registroSubtype === 'hidraulico')
+        || (answers.productType === 'registro' && answers.registroSubtype === 'telefonico' && !needsRegistroPhoneMeasures(answers.registroPhoneOption));
     }
 
     function replacesGeneralTraffic(answers){
       return (answers.productType === 'pozo' && answers.pozoSubtype === 'Eléctrico')
         || (answers.productType === 'pozo' && answers.pozoSubtype === 'Telefónico')
-        || (answers.productType === 'registro' && answers.registroSubtype === 'telefonico' && requiresPhoneTraffic(answers.registroPhoneOption));
+        || (answers.productType === 'registro' && answers.registroSubtype === 'telefonico' && !requiresPhoneTraffic(answers.registroPhoneOption));
     }
 
     function clearComposer(){
@@ -1868,10 +1874,11 @@
         if(answers.registroSubtype === 'electrico'){
           keys.push('registroElectricTension', 'registroElectricLocation', 'registroElectricType', 'measures', 'trafficType');
         } else if(answers.registroSubtype === 'telefonico'){
-          keys.push('registroPhoneOption', 'measures');
+          keys.push('registroPhoneOption');
+          if(needsRegistroPhoneMeasures(answers.registroPhoneOption)){
+            keys.push('measures');
+          }
           if(requiresPhoneTraffic(answers.registroPhoneOption)){
-            keys.push('registroPhoneTraffic');
-          } else {
             keys.push('trafficType');
           }
         } else if(answers.registroSubtype === 'hidraulico'){
@@ -1995,7 +2002,6 @@
           keys.push('registroElectricTension', 'registroElectricLocation', 'registroElectricType');
         } else if(quote.registroSubtype === 'telefonico'){
           keys.push('registroPhoneOption');
-          if(quote.registroPhoneTraffic) keys.push('registroPhoneTraffic');
         } else if(quote.registroSubtype === 'hidraulico'){
           keys.push('registroHydraulicDiameter');
           if(quote.registroHydraulicHeight) keys.push('registroHydraulicHeight');
